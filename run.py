@@ -6,6 +6,7 @@ from xml.etree import ElementTree
 import urllib
 import sqlite3
 from flask import g
+import appid
 
 DATABASE = 'db/words.db'
 
@@ -58,7 +59,7 @@ Returns parsed XML tree with Wolfram response
 '''
 def make_wolfram_query(query):
 
-	getVars = {'input': query, 'appid': "V6EEW2-VXJ6VY7GQA"}
+	getVars = {'input': query, 'appid': appid.app_id}
 	url_base = 'http://api.wolframalpha.com/v2/query?'
 	
 	url = url_base + urllib.urlencode(getVars)
@@ -106,7 +107,7 @@ def get_definition(word):
 
 
 @app.route("/")
-def template_test():
+def template():
     return render_template('template.html')
 
 @app.route('/wolfram-query', methods=['GET'])

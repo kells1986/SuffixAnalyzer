@@ -5,7 +5,7 @@ function do_query()
 	console.log(suffix);
 	$("#noresults").hide();
 	$("#results").empty();
-
+	$("#results").append("<li>Loading...</li>");
 	search = "words ending in " + suffix;
 
 	$.ajax({
@@ -15,7 +15,7 @@ function do_query()
     		query: search
   		},
   		success: function(response) {
-    		
+    		$("#results").empty();
     		if (response.length == 0)
     		{
     			$("#results").append("<li>There were no results for the suffix: " + suffix + "</li>");
