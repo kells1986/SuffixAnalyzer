@@ -13,7 +13,7 @@ function do_query()
     		$("#results").empty();
     		for (var i=0; i < response.length; i++)
     		{
-    			$("#results").append("<li>"+response[i]+"</li>");	
+    			$("#results").append("<li>"+response[i]["word"] + " - " + response[i]["definition"] + "</li>");	
     		}	
     		console.log("Done");
   		},

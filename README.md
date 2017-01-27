@@ -30,3 +30,13 @@ pip install Flask
 pip install requests
 ```
 
+The database is an sqlite3 Database. It might require the following command:
+```
+pip install sqlite3
+```
+
+```
+create table words(id integer PRIMARY KEY, word text NOT NULL UNIQUE, definition text NOT NULL);
+```
+
+
