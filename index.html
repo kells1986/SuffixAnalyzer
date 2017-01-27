@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery.parseXML demo</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+
+<title>Suffix Analyzer</title> 
+<h2>Suffix Analyzer</h2>
+
+
+<input id="query"/>
+<button onclick="clicked();">Query</button>
+ 
+<script>
+
+var APPID = "V6EEW2-VXJ6VY7GQA";
+var baseURL = "http://api.wolframalpha.com/v2/query?input=";
+
+
+function clicked()
+{
+	var suffix = $("#query").val();
+	var q_text = "words ending in " + suffix;
+	var URL = baseURL + encodeURI(q_text) + "&appid="+encodeURI(APPID);
+	alert(URL);
+
+	$.get( URL, function( data ) { console.log(data);}, "xml" );
+
+
+}
+
+/*
+var xml = "<rss version='2.0'><channel><title>RSS Title</title></channel></rss>",
+  xmlDoc = $.parseXML( xml ),
+  $xml = $( xmlDoc ),
+  $title = $xml.find( "title" );
+ 
+// Append "RSS Title" to #someElement
+$( "#someElement" ).append( $title.text() );
+ 
+// Change the title to "XML Title"
+$title.text( "XML Title" );
+ 
+// Append "XML Title" to #anotherElement
+$( "#anotherElement" ).append( $title.text() );
+*/
+</script>
+ 
+</body>
+</html>
