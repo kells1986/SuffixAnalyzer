@@ -5,7 +5,7 @@ function do_query()
   		url: "wolfram-query",
   		type: "get", //send it through get method
   		data: { 
-    		query: "This is a query"
+    		query: "words ending in lly"
   		},
   		success: function(response) {
     		//Do Something

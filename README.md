@@ -27,6 +27,6 @@ cd <project>
 virtualenv venv
 . venv/bin/activate
 pip install Flask
-history
+pip install requests
 ```
 
