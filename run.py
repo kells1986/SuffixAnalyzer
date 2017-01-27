@@ -113,9 +113,6 @@ def template():
 @app.route('/wolfram-query', methods=['GET'])
 def wolfram_query():
 
-	start = 0
-	throttle = 5 # don't want to use my usage allowance
-
 	suffix_text = request.args.get('query')
 	word_tree = make_wolfram_query(suffix_text)
 	words = get_words_from_tree(word_tree)
@@ -123,10 +120,10 @@ def wolfram_query():
 	result = []
 
 	if words != None:
-		for word in words[start:start+throttle]:
+		for word in words[:appid.limit]:
 			defin.append(get_definition(word))
 
-		for w,d in zip(words[start:start+throttle],defin):
+		for w,d in zip(words[:appid.limit],defin):
 			if d == None:
 				d = "Could not find definition"
 			result.append({"word":w, "definition":d})

@@ -17,9 +17,13 @@ e.g., angry: feeling or showing anger
 
 ## Setup
 
+This project is made using Python 2.7.11
+
 ### Installing Tools
 
-This project is built on the Python Flask framework.
+This project is built on the Python Flask framework. It uses a virtual environment to install dependencies.
+
+The following commands will setup the project:
 
 ```
 sudo pip install virtualenv
@@ -30,13 +34,26 @@ pip install Flask
 pip install requests
 ```
 
-The database is an sqlite3 Database. It might require the following command:
-```
-pip install sqlite3
-```
+The database is an sqlite3 Database. You will need to install sqlite3, which can be downloaded here: https://sqlite.org/download.html
+
+### Getting the Code Working
+
+To get the app to work edit the file appid.py and enter a valid app ID.
+
+There is also a limit variable, which is designed to limit the amount of definition calls to the Wolfram API.
+
+After adding the app ID, from the top level directory run the following commands:
 
 ```
-create table words(id integer PRIMARY KEY, word text NOT NULL UNIQUE, definition text NOT NULL);
+cd db
+sqlite3 words.db < schema.sql
+cd ..
+python run.py
 ```
+
+At this point you can navigate to http://localhost:5000 in your browser to use Suffix Analyser.
+
+
+
 
 
