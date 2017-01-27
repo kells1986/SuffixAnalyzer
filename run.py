@@ -38,7 +38,7 @@ def insert_db(table, fields=(), values=()):
     )
     cur.execute(query, values)
     cur.commit()
-    cur.close()
+    
 
 
 def get_def_db(word):
@@ -82,8 +82,11 @@ def get_plaintext_result(tree):
 
 def get_words_from_tree(tree):
 	raw_text = get_plaintext_result(tree)
-	the_words = raw_text.split(" | ")
-	return the_words
+	if raw_text != None:
+		the_words = raw_text.split(" | ")
+		return the_words
+	else:
+		return None
 
 def get_definition_from_tree(tree):
 	'''
@@ -96,8 +99,9 @@ def get_definition(word):
 	if db_def == None:
 		def_tree = make_wolfram_query("define "+ word)
 		wf_def = get_definition_from_tree(def_tree)
-		db_def = wf_def
-		set_def_db(word, db_def)
+		if wf_def != None:
+			db_def = wf_def
+			set_def_db(word, db_def)
 	return db_def
 
 
@@ -108,22 +112,23 @@ def template_test():
 @app.route('/wolfram-query', methods=['GET'])
 def wolfram_query():
 
-	start = 6
+	start = 0
 	throttle = 5 # don't want to use my usage allowance
 
 	suffix_text = request.args.get('query')
 	word_tree = make_wolfram_query(suffix_text)
 	words = get_words_from_tree(word_tree)
 	defin = []
-
-	for word in words[start:start+throttle]:
-		defin.append(get_definition(word))
-
 	result = []
-	for w,d in zip(words[start:start+throttle],defin):
-		if d == None:
-			d = "Could not find definition"
-		result.append({"word":w, "definition":d})
+
+	if words != None:
+		for word in words[start:start+throttle]:
+			defin.append(get_definition(word))
+
+		for w,d in zip(words[start:start+throttle],defin):
+			if d == None:
+				d = "Could not find definition"
+			result.append({"word":w, "definition":d})
 
 	return jsonify(result)
 

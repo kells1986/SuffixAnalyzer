@@ -1,24 +1,36 @@
 
 function do_query()
 {
+	var suffix = $("#query").val();
+	console.log(suffix);
+	$("#noresults").hide();
+	$("#results").empty();
+
+	search = "words ending in " + suffix;
+
 	$.ajax({
   		url: "wolfram-query",
   		type: "get", //send it through get method
   		data: { 
-    		query: "words ending in lly"
+    		query: search
   		},
   		success: function(response) {
-    		//Do Something
-    		$("#noresults").hide();
-    		$("#results").empty();
-    		for (var i=0; i < response.length; i++)
+    		
+    		if (response.length == 0)
     		{
-    			$("#results").append("<li>"+response[i]["word"] + " - " + response[i]["definition"] + "</li>");	
-    		}	
+    			$("#results").append("<li>There were no results for the suffix: " + suffix + "</li>");
+    		}
+    		else
+    		{
+    			for (var i=0; i < response.length; i++)
+    			{
+    			$("#results").append("<li>"+response[i]["word"] + ": " + response[i]["definition"] + "</li>");	
+    			}
+    		}
+    			
     		console.log("Done");
   		},
   		error: function(xhr) {
-    		//Do Something to handle error
     		$("#noresults").text("There was a problem with your query");
     		$("#noresults").show();
     		$("#results").hide();

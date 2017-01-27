@@ -10,19 +10,23 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12 text-center">
-          <h2>Suffix Analyser</h2>
+          <div class = "jumbotron">
+            <h2>Suffix Analyser</h2>
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-3 text-center">
-          
-            <input type="text" name="query">
-            <button class="btn-default" value="Query" onclick="do_query();">
+            <h3>Query</h3>
+            <p>Enter a suffix and see a list of definitions</p>
+            <input type="text" id="query">
+            <button onclick="do_query();">Query</button>
           
         </div>
         <div class="col-md-9 text-center">
-          <p id="noresults">Results go here</p>
+          <h3>Results</h3>
+          <p id="noresults">Your results will be shown here</p>
           <ul id="results">
           </ul>
         </div>
