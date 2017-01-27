@@ -10,10 +10,12 @@ function do_query()
   		success: function(response) {
     		//Do Something
     		$("#noresults").hide();
+    		$("#results").empty();
     		for (var i=0; i < response.length; i++)
     		{
     			$("#results").append("<li>"+response[i]+"</li>");	
     		}	
+    		console.log("Done");
   		},
   		error: function(xhr) {
     		//Do Something to handle error
