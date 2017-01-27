@@ -8,11 +8,11 @@ app = Flask(__name__)
 def template_test():
     return render_template('template.html')
 
-@app.route('/wolfram-query', methods=['POST'])
+@app.route('/wolfram-query', methods=['GET'])
 def wolfram_query():
-	text = request.form['query']
-	print text
-	return render_template('template.html')
+	text = request.args.get('query')
+	some_data = text.split(" ")
+	return jsonify(some_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
