@@ -29,6 +29,7 @@ function doQuery()
     			
   		},
   		error: function(xhr) {
+        console.log(xhr);
     		$("#noresults").text("There was a problem with your query");
     		$("#noresults").show();
     		$("#results").hide();

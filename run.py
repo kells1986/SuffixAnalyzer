@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, Response
 from flask import request
 from flask import jsonify
 from wolfram import *
 import appid
+import json
 
 app = Flask(__name__)
 
@@ -17,17 +18,16 @@ def wolframQuery():
 	words = wlf.getWordsFromSuffix(suffix_text)
 	defin = []
 	result = []
+	def generate(words):
+		with app.app_context():
+			if words != None:
+				for word in words[:appid.limit]:
+					d = wlf.getDefinition(word)
+					if d == None:
+						d = "Could not find definition"
+					yield json.dumps({"word":word, "definition":d}).decode('utf-8')
 
-	if words != None:
-		for word in words[:appid.limit]:
-			defin.append(wlf.getDefinition(word))
-
-		for w,d in zip(words[:appid.limit],defin):
-			if d == None:
-				d = "Could not find definition"
-			result.append({"word":w, "definition":d})
-
-	return jsonify(result)
+	return Response(generate(words), mimetype='text/application-json')
 
 
 if __name__ == '__main__':
