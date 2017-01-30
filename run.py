@@ -11,23 +11,23 @@ app = Flask(__name__)
 def template():
 	return render_template('template.html')
 
+def generateDefinitions(wolframClient,words):
+	with app.app_context():
+		if words != None:
+			for word in words[:appid.limit]:
+				definition = wolframClient.getDefinition(word)
+				if definition == None:
+					definition = "Could not find definition"
+				yield "data:"+word+ ":::"+definition+"\n\n"
+
 @app.route('/wolfram-query', methods=['GET'])
 def wolframQuery():
-	wlf = WolframAPIClient()
+	wolframClient = WolframAPIClient()
+	
 	suffix_text = request.args.get('query')
-	words = wlf.getWordsFromSuffix(suffix_text)
-	defin = []
-	result = []
-	def generate(words):
-		with app.app_context():
-			if words != None:
-				for word in words[:appid.limit]:
-					d = wlf.getDefinition(word)
-					if d == None:
-						d = "Could not find definition"
-					yield "data:"+word+ ":::"+d+"\n\n"
+	words = wolframClient.getWordsFromSuffix(suffix_text)
 
-	return Response(generate(words), mimetype='text/event-stream')
+	return Response(generateDefinitions(wolframClient,words), mimetype='text/event-stream')
 
 
 if __name__ == '__main__':
