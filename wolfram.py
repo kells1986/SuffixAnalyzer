@@ -5,41 +5,36 @@ from database import *
 import appid
 
 
-class WolframAPI(object):
+class WolframAPIClient(object):
 
-	def __init__(self, app):
-		self.databaseManager = DatabaseManager(app)
+	def __init__(self):
+		self.databaseManager = DefinitionDatabase()
 
-	def getDatabaseDefinition(self, word):
-		res = self.databaseManager.queryDB('select * from words where word = ?',
+	def __getDatabaseDefinition(self, word):
+		result = self.databaseManager.queryDB('select * from words where word = ?',
                 [word], one=True)
-		if res != None:
-			return res[2]
+		if result != None:
+			return result[2]
 		else:
-			return res
+			return result
 
-	def setDatabaseDefinition(self, word, definition):
-		res = self.databaseManager.insertDB('words', fields=('word','definition'), values=(word,definition))
-		return res
+	def __setDatabaseDefinition(self, word, definition):
+		result = self.databaseManager.insertDB('words', fields=('word','definition'), values=(word,definition))
+		return result
 
 	'''
 	Returns parsed XML tree with Wolfram response
 	'''
-	def makeWolframQuery(self, query):
-
+	def __makeWolframQuery(self, query):
 		getVars = {'input': query, 'appid': appid.app_id}
-		url_base = 'http://api.wolframalpha.com/v2/query?'
-	
-		url = url_base + urllib.urlencode(getVars)
-
-		print url
+		urlBase = 'http://api.wolframalpha.com/v2/query?'
+		url = urlBase + urllib.urlencode(getVars)
+		
 		response = requests.get(url)
+		xmlTree = ElementTree.fromstring(response.content)
+		return xmlTree
 
-		raw_text = None
-		tree = ElementTree.fromstring(response.content)
-		return tree
-
-	def getPlaintextResult(self,tree):
+	def __getPlaintextResult(self,tree):
 		plaintext = None
 		for pod in tree.findall('.//pod'):
 			if pod.attrib['title'] == "Result":
@@ -48,24 +43,29 @@ class WolframAPI(object):
 						plaintext = pt.text
 		return plaintext
 
-	def getWordsFromTree(self,tree):
-		raw_text = self.getPlaintextResult(tree)
-		if raw_text != None:
-			the_words = raw_text.split(" | ")
-			return the_words
+	def __getWordsFromTree(self,tree):
+		rawText = self.__getPlaintextResult(tree)
+		if rawText != None:
+			theWords = rawText.split(" | ")
+			return theWords
 		else:
 			return None
 
-	def getDefinitionFromTree(self,tree):
-		return self.getPlaintextResult(tree)
+	def __getDefinitionFromTree(self,tree):
+		return self.__getPlaintextResult(tree)
+
+	def getWordsFromSuffix(self,suffix):
+		wordTree = self.__makeWolframQuery(suffix)
+		words = self.__getWordsFromTree(wordTree)
+		return words
 
 	def getDefinition(self,word):
-		db_def = self.getDatabaseDefinition(word)
-		if db_def == None:
-			def_tree = self.makeWolframQuery("define "+ word)
-			wf_def = self.getDefinitionFromTree(def_tree)
-			if wf_def != None:
-				db_def = wf_def
-				self.setDatabaseDefinition(word, db_def)
-		return db_def
+		databaseDefinition = self.__getDatabaseDefinition(word)
+		if databaseDefinition == None:
+			definitionTree = self.__makeWolframQuery("define "+ word)
+			wolframDefinition = self.__getDefinitionFromTree(definitionTree)
+			if wolframDefinition != None:
+				databaseDefinition = wolframDefinition
+				self.__setDatabaseDefinition(word, databaseDefinition)
+		return databaseDefinition
 

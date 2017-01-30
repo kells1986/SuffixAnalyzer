@@ -1,12 +1,11 @@
 
-function do_query()
+function doQuery()
 {
 	var suffix = $("#query").val();
-	console.log(suffix);
 	$("#noresults").hide();
 	$("#results").empty();
 	$("#results").append("<li>Loading...</li>");
-	search = "words ending in " + suffix;
+	var search = "words ending in " + suffix;
 
 	$.ajax({
   		url: "wolfram-query",
@@ -22,13 +21,12 @@ function do_query()
     		}
     		else
     		{
-    			for (var i=0; i < response.length; i++)
+    			for (var result=0; result < response.length; result++)
     			{
-    			$("#results").append("<li>"+response[i]["word"] + ": " + response[i]["definition"] + "</li>");	
+    			 $("#results").append("<li>"+response[result]["word"] + ": " + response[result]["definition"] + "</li>");	
     			}
     		}
     			
-    		console.log("Done");
   		},
   		error: function(xhr) {
     		$("#noresults").text("There was a problem with your query");

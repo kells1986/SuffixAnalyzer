@@ -3,13 +3,12 @@ from flask import g
 
 DATABASE = 'db/words.db'
 
-class DatabaseManager(object):
+class DefinitionDatabase(object):
 
-    def __init__(self, app, path=DATABASE):
-        self.app = app
+    def __init__(self, path=DATABASE):
         self.path = path
 
-    def getDB(self):
+    def __getDB(self):
         db = getattr(g, '_database', None)
         if db is None:
             db = g._database = sqlite3.connect(self.path)
@@ -17,13 +16,13 @@ class DatabaseManager(object):
 
 
     def queryDB(self, query, args=(), one=False):
-        cur = self.getDB().execute(query, args)
+        cur = self.__getDB().execute(query, args)
         rv = cur.fetchall()
         cur.close()
         return (rv[0] if rv else None) if one else rv
 
     def insertDB(self,table, fields=(), values=()):
-        cur = self.getDB()
+        cur = self.__getDB()
         query = 'INSERT INTO %s (%s) VALUES (%s)' % (
             table,
             ', '.join(fields),

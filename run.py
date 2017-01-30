@@ -12,10 +12,9 @@ def template():
 
 @app.route('/wolfram-query', methods=['GET'])
 def wolframQuery():
-	wlf = WolframAPI(app)
+	wlf = WolframAPIClient()
 	suffix_text = request.args.get('query')
-	word_tree = wlf.makeWolframQuery(suffix_text)
-	words = wlf.getWordsFromTree(word_tree)
+	words = wlf.getWordsFromSuffix(suffix_text)
 	defin = []
 	result = []
 

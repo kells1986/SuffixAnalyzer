@@ -30,7 +30,7 @@ sudo pip install virtualenv
 cd <project>
 virtualenv venv
 . venv/bin/activate
-pip install Flask
+pip install flask
 pip install requests
 ```
 
