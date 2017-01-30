@@ -60,7 +60,6 @@ class WolframAPIClient(object):
 		return words
 
 	def getDefinition(self,word):
-		print "Defining %s" % word
 		databaseDefinition = self.__getDatabaseDefinition(word)
 		if databaseDefinition == None:
 			definitionTree = self.__makeWolframQuery("define "+ word)

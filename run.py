@@ -18,7 +18,8 @@ def generateDefinitions(wolframClient,words):
 				definition = wolframClient.getDefinition(word)
 				if definition == None:
 					definition = "Could not find definition"
-				yield "data:"+word+ ":::"+definition+"\n\n"
+				theJSON = {"word":word, "definition":definition, "last":word==words[appid.limit-1]}
+				yield "data:"+json.dumps(theJSON)+"\n\n"
 
 @app.route('/wolfram-query', methods=['GET'])
 def wolframQuery():

@@ -13,14 +13,23 @@ function doQuery()
   
   wolframStream.onmessage = function (e) {
     $("#loading").hide();
+    
     var rawString = e.data;
-    var parsedString = rawString.split(":::");
-    $("#results").append("<li>"+parsedString[0] + ": " + parsedString[1] + "</li>");
+    var parsedMessage = JSON.parse(rawString);
+    $("#results").append("<li>"+parsedMessage["word"] + ": " + parsedMessage["definition"] + "</li>");
+    
+    if (parsedMessage["last"])
+    {
+      wolframStream.close();
+    }
   };
 
   wolframStream.onerror = function(e) {
     wolframStream.close();
   };
 
+  wolframStream.onend = function(e) {
+    wolframStream.close();
+  };
 
 }
