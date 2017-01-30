@@ -10,9 +10,15 @@ function doQuery()
   
   var jsonStream = new EventSource(url);
   jsonStream.onmessage = function (e) {
-    var message = JSON.parse(e.data);
+    alert(e.data);
+    //var message = JSON.parse(e.data);
     // handle message
-    $("#results").append("<li>"+message["word"] + ": " + message["definition"] + "</li>");
+    //$("#results").append("<li>"+message["word"] + ": " + message["definition"] + "</li>");
+  };
+
+  jsonStream.onerror = function() {
+    alert("Error");
+    jsonStream.close();
   };
 
 
