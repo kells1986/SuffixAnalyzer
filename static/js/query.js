@@ -6,7 +6,17 @@ function doQuery()
 	$("#results").empty();
 	$("#results").append("<li>Loading...</li>");
 	var search = "words ending in " + suffix;
+  var url = encodeURI("wolfram-query?query="+search);
+  
+  var jsonStream = new EventSource(url);
+  jsonStream.onmessage = function (e) {
+    var message = JSON.parse(e.data);
+    // handle message
+    $("#results").append("<li>"+message["word"] + ": " + message["definition"] + "</li>");
+  };
 
+
+  /*
 	$.ajax({
   		url: "wolfram-query",
   		type: "get", //send it through get method
@@ -35,5 +45,6 @@ function doQuery()
     		$("#results").hide();
   		}
 	});
+*/
 
 }

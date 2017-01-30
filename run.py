@@ -27,7 +27,7 @@ def wolframQuery():
 						d = "Could not find definition"
 					yield json.dumps({"word":word, "definition":d}).decode('utf-8')
 
-	return Response(generate(words), mimetype='text/application-json')
+	return Response(generate(words), mimetype='text/event-stream')
 
 
 if __name__ == '__main__':
