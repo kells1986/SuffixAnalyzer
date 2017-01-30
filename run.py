@@ -25,7 +25,7 @@ def wolframQuery():
 					d = wlf.getDefinition(word)
 					if d == None:
 						d = "Could not find definition"
-					yield json.dumps({"word":word, "definition":d}).decode('utf-8')
+					yield "data:word,"+word+ ",definition,"+d+"\n\n"
 
 	return Response(generate(words), mimetype='text/event-stream')
 

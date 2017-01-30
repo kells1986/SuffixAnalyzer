@@ -16,7 +16,8 @@ function doQuery()
     //$("#results").append("<li>"+message["word"] + ": " + message["definition"] + "</li>");
   };
 
-  jsonStream.onerror = function() {
+  jsonStream.onerror = function(e) {
+    console.log(e);
     alert("Error");
     jsonStream.close();
   };
